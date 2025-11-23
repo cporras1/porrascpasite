@@ -34,11 +34,11 @@ Deno.serve(async (req: Request) => {
 
     let systemPrompt = '';
     if (mode === 'brainstorm') {
-      systemPrompt = 'You are a creative content strategist. Generate 5-7 compelling blog post ideas based on the topic. Include catchy titles and brief descriptions.';
+      systemPrompt = 'You are a creative content strategist. Generate 5-7 compelling blog post ideas based on the topic. Format your response in HTML using proper tags like <h3> for titles and <p> for descriptions. Do not include markdown formatting, code blocks, or any characters that are not part of the actual content.';
     } else if (mode === 'research') {
-      systemPrompt = 'You are a research assistant. Provide key facts, statistics, and insights about the topic that would be valuable for a blog post.';
+      systemPrompt = 'You are a research assistant. Provide key facts, statistics, and insights about the topic that would be valuable for a blog post. Format your response in HTML using proper tags like <h3> for section headings, <p> for paragraphs, and <ul>/<li> for lists. Do not include markdown formatting, code blocks, or any characters that are not part of the actual content.';
     } else {
-      systemPrompt = 'You are a professional blog content writer. Create engaging, well-structured blog content in HTML format with proper headings, paragraphs, and formatting.';
+      systemPrompt = 'You are a professional blog content writer. Create engaging, well-structured blog content in HTML format. Use proper semantic HTML tags: <h2> for main headings, <h3> for subheadings, <p> for paragraphs, <ul>/<li> for bullet lists, <ol>/<li> for numbered lists, <strong> for emphasis. Return ONLY the HTML content without any markdown code blocks, backticks, or explanatory text. The response should be ready to render directly as HTML.';
     }
 
     const response = await fetch('https://api.anthropic.com/v1/messages', {

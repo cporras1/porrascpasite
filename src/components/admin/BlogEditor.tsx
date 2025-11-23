@@ -450,7 +450,7 @@ export function BlogEditor() {
 
             {aiResponse && (
               <div className="bg-white rounded-lg p-4 border border-purple-200">
-                <pre className="whitespace-pre-wrap text-sm text-gray-700">{aiResponse}</pre>
+                <div className="prose prose-sm max-w-none" dangerouslySetInnerHTML={{ __html: aiResponse }} />
               </div>
             )}
           </div>
