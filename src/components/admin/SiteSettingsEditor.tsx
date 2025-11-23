@@ -77,6 +77,7 @@ export function SiteSettingsEditor() {
           site_name: settings.site_name,
           tagline: settings.tagline,
           logo_url: settings.logo_url,
+          show_company_name: settings.show_company_name,
           primary_color: settings.primary_color,
           secondary_color: settings.secondary_color,
           accent_color: settings.accent_color,
@@ -169,6 +170,24 @@ export function SiteSettingsEditor() {
             </div>
           </div>
         </div>
+        {logoPreview && (
+          <div className="mt-4">
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={settings.show_company_name}
+                onChange={(e) => setSettings({ ...settings, show_company_name: e.target.checked })}
+                className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+              />
+              <span className="text-sm font-medium text-gray-700">
+                Display company name alongside logo
+              </span>
+            </label>
+            <p className="text-xs text-gray-500 mt-1 ml-6">
+              When unchecked, only the logo will be shown in the header
+            </p>
+          </div>
+        )}
       </div>
 
       <div>

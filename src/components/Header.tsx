@@ -57,9 +57,11 @@ export function Header() {
                   className="h-12 w-auto object-contain"
                 />
               )}
-              <span className="text-2xl font-bold" style={{ color: settings.primary_color }}>
-                {settings.site_name}
-              </span>
+              {settings.show_company_name && (
+                <span className="text-2xl font-bold" style={{ color: settings.primary_color }}>
+                  {settings.site_name}
+                </span>
+              )}
             </a>
           </div>
 
