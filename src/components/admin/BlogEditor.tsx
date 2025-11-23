@@ -3,6 +3,8 @@ import { Save, Upload, X, Sparkles, Lightbulb, Search, Trash2, Eye, Plus } from 
 import { supabase } from '../../lib/supabase';
 import { useSiteSettings } from '../../hooks/useSiteSettings';
 import type { Database } from '../../lib/database.types';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 type BlogPost = Database['public']['Tables']['blog_posts']['Row'];
 
@@ -20,7 +22,6 @@ export function BlogEditor() {
   const [aiLoading, setAILoading] = useState(false);
   const [uploading, setUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const contentRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
     fetchPosts();
@@ -243,36 +244,6 @@ export function BlogEditor() {
     }
   };
 
-  const insertFormatting = (tag: string) => {
-    if (!contentRef.current || !editing) return;
-
-    const textarea = contentRef.current;
-    const start = textarea.selectionStart;
-    const end = textarea.selectionEnd;
-    const selectedText = editing.content.substring(start, end);
-
-    let formattedText = '';
-    if (tag === 'h2') {
-      formattedText = `<h2>${selectedText || 'Heading'}</h2>`;
-    } else if (tag === 'h3') {
-      formattedText = `<h3>${selectedText || 'Subheading'}</h3>`;
-    } else if (tag === 'p') {
-      formattedText = `<p>${selectedText || 'Paragraph text'}</p>`;
-    } else if (tag === 'strong') {
-      formattedText = `<strong>${selectedText || 'bold text'}</strong>`;
-    } else if (tag === 'em') {
-      formattedText = `<em>${selectedText || 'italic text'}</em>`;
-    } else if (tag === 'ul') {
-      formattedText = `<ul>\n  <li>${selectedText || 'List item'}</li>\n</ul>`;
-    } else if (tag === 'a') {
-      formattedText = `<a href="https://example.com">${selectedText || 'link text'}</a>`;
-    }
-
-    const newContent =
-      editing.content.substring(0, start) + formattedText + editing.content.substring(end);
-
-    setEditing({ ...editing, content: newContent });
-  };
 
   if (loading) {
     return <div className="text-center py-8">Loading blog posts...</div>;
@@ -582,24 +553,24 @@ export function BlogEditor() {
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">Content (HTML)</label>
-        <div className="mb-2 flex flex-wrap gap-2">
-          <button type="button" onClick={() => insertFormatting('h2')} className="px-3 py-1 text-sm bg-gray-100 rounded hover:bg-gray-200">H2</button>
-          <button type="button" onClick={() => insertFormatting('h3')} className="px-3 py-1 text-sm bg-gray-100 rounded hover:bg-gray-200">H3</button>
-          <button type="button" onClick={() => insertFormatting('p')} className="px-3 py-1 text-sm bg-gray-100 rounded hover:bg-gray-200">P</button>
-          <button type="button" onClick={() => insertFormatting('strong')} className="px-3 py-1 text-sm bg-gray-100 rounded hover:bg-gray-200"><strong>B</strong></button>
-          <button type="button" onClick={() => insertFormatting('em')} className="px-3 py-1 text-sm bg-gray-100 rounded hover:bg-gray-200"><em>I</em></button>
-          <button type="button" onClick={() => insertFormatting('ul')} className="px-3 py-1 text-sm bg-gray-100 rounded hover:bg-gray-200">List</button>
-          <button type="button" onClick={() => insertFormatting('a')} className="px-3 py-1 text-sm bg-gray-100 rounded hover:bg-gray-200">Link</button>
+        <label className="block text-sm font-medium text-gray-700 mb-2">Content</label>
+        <div className="bg-white border border-gray-300 rounded-lg">
+          <ReactQuill
+            theme="snow"
+            value={editing.content}
+            onChange={(content) => setEditing({ ...editing, content })}
+            modules={{
+              toolbar: [
+                [{ 'header': [2, 3, false] }],
+                ['bold', 'italic', 'underline'],
+                [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                ['link'],
+                ['clean']
+              ],
+            }}
+            className="wysiwyg-editor"
+          />
         </div>
-        <textarea
-          ref={contentRef}
-          value={editing.content}
-          onChange={(e) => setEditing({ ...editing, content: e.target.value })}
-          required
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono text-sm"
-          rows={15}
-        />
       </div>
 
       <div className="flex items-center gap-6">

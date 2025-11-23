@@ -1,3 +1,12 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.wysiwyg-editor .ql-container {
+  min-height: 300px;
+  font-size: 16px;
+}
+
+.wysiwyg-editor .ql-editor {
+  min-height: 300px;
+}
