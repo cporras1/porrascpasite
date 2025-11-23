@@ -69,7 +69,7 @@ export function Services() {
 
         <div className="text-center mt-12">
           <a
-            href="#contact"
+            href="/services"
             className="inline-flex items-center justify-center px-8 py-4 rounded-lg text-white font-semibold text-lg transition-all hover:opacity-90 shadow-lg"
             style={{ backgroundColor: settings.secondary_color }}
           >
