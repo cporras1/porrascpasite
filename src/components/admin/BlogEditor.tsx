@@ -110,65 +110,40 @@ export function BlogEditor() {
   const handleAIAssist = async () => {
     if (!aiPrompt.trim()) return;
 
-    const apiKey = import.meta.env.VITE_ANTHROPIC_API_KEY;
-
-    console.log('API Key exists:', !!apiKey);
-    console.log('API Key length:', apiKey?.length || 0);
-    console.log('All env vars:', import.meta.env);
-
-    if (!apiKey) {
-      setAIResponse('AI assistance is not available. Please make sure you have configured the Anthropic API key in your environment variables.');
-      return;
-    }
-
     setAILoading(true);
     setAIResponse('');
 
     try {
-      let systemPrompt = '';
-      if (aiMode === 'brainstorm') {
-        systemPrompt = 'You are a creative content strategist. Generate 5-7 compelling blog post ideas based on the topic. Include catchy titles and brief descriptions.';
-      } else if (aiMode === 'research') {
-        systemPrompt = 'You are a research assistant. Provide key facts, statistics, and insights about the topic that would be valuable for a blog post.';
-      } else {
-        systemPrompt = 'You are a professional blog content writer. Create engaging, well-structured blog content in HTML format with proper headings, paragraphs, and formatting.';
-      }
+      const apiUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-assist`;
 
-      const response = await fetch('https://api.anthropic.com/v1/messages', {
+      const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {
+          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
           'Content-Type': 'application/json',
-          'x-api-key': apiKey,
-          'anthropic-version': '2023-06-01',
         },
         body: JSON.stringify({
-          model: 'claude-3-5-sonnet-20241022',
-          max_tokens: 2000,
-          messages: [
-            {
-              role: 'user',
-              content: `${systemPrompt}\n\nTopic: ${aiPrompt}`,
-            },
-          ],
+          mode: aiMode,
+          prompt: aiPrompt,
         }),
       });
 
       if (!response.ok) {
-        throw new Error('AI request failed');
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'AI request failed');
       }
 
       const data = await response.json();
-      const content = data.content[0].text;
-      setAIResponse(content);
+      setAIResponse(data.content);
 
       if (aiMode === 'generate' && editing && contentRef.current) {
         const currentContent = editing.content || '';
-        const newContent = currentContent + '\n\n' + content;
+        const newContent = currentContent + '\n\n' + data.content;
         setEditing({ ...editing, content: newContent });
       }
     } catch (error) {
       console.error('Error with AI assist:', error);
-      setAIResponse('AI assistance is not available. Please make sure you have configured the Anthropic API key in your environment variables.');
+      setAIResponse(`AI assistance error: ${error instanceof Error ? error.message : 'Unknown error occurred'}`);
     } finally {
       setAILoading(false);
     }
