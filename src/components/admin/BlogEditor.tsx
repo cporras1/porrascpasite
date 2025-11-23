@@ -110,6 +110,13 @@ export function BlogEditor() {
   const handleAIAssist = async () => {
     if (!aiPrompt.trim()) return;
 
+    const apiKey = import.meta.env.VITE_ANTHROPIC_API_KEY;
+
+    if (!apiKey) {
+      setAIResponse('AI assistance is not available. Please make sure you have configured the Anthropic API key in your environment variables.');
+      return;
+    }
+
     setAILoading(true);
     setAIResponse('');
 
@@ -127,7 +134,7 @@ export function BlogEditor() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'x-api-key': import.meta.env.VITE_ANTHROPIC_API_KEY || '',
+          'x-api-key': apiKey,
           'anthropic-version': '2023-06-01',
         },
         body: JSON.stringify({
