@@ -112,6 +112,10 @@ export function BlogEditor() {
 
     const apiKey = import.meta.env.VITE_ANTHROPIC_API_KEY;
 
+    console.log('API Key exists:', !!apiKey);
+    console.log('API Key length:', apiKey?.length || 0);
+    console.log('All env vars:', import.meta.env);
+
     if (!apiKey) {
       setAIResponse('AI assistance is not available. Please make sure you have configured the Anthropic API key in your environment variables.');
       return;
