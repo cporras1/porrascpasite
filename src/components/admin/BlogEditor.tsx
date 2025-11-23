@@ -135,18 +135,47 @@ export function BlogEditor() {
 
       const data = await response.json();
       setAIResponse(data.content);
-
-      if (aiMode === 'generate' && editing && contentRef.current) {
-        const currentContent = editing.content || '';
-        const newContent = currentContent + '\n\n' + data.content;
-        setEditing({ ...editing, content: newContent });
-      }
     } catch (error) {
       console.error('Error with AI assist:', error);
       setAIResponse(`AI assistance error: ${error instanceof Error ? error.message : 'Unknown error occurred'}`);
     } finally {
       setAILoading(false);
     }
+  };
+
+  const handleAcceptAIContent = () => {
+    if (!aiResponse || !editing) return;
+
+    if (aiMode === 'generate') {
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = aiResponse;
+
+      const firstHeading = tempDiv.querySelector('h1, h2, h3');
+      const title = firstHeading?.textContent || aiPrompt.substring(0, 60);
+
+      const paragraphs = Array.from(tempDiv.querySelectorAll('p'));
+      const excerpt = paragraphs.length > 0
+        ? paragraphs[0].textContent?.substring(0, 160) || ''
+        : '';
+
+      const slug = generateSlug(title);
+
+      setEditing({
+        ...editing,
+        title,
+        slug,
+        excerpt,
+        content: aiResponse,
+      });
+    } else {
+      const currentContent = editing.content || '';
+      const newContent = currentContent + '\n\n' + aiResponse;
+      setEditing({ ...editing, content: newContent });
+    }
+
+    setAIResponse('');
+    setAIPrompt('');
+    setShowAI(false);
   };
 
   const handleSubmit = async (e: FormEvent) => {
@@ -449,8 +478,17 @@ export function BlogEditor() {
             </button>
 
             {aiResponse && (
-              <div className="bg-white rounded-lg p-4 border border-purple-200">
-                <div className="prose prose-sm max-w-none" dangerouslySetInnerHTML={{ __html: aiResponse }} />
+              <div className="space-y-4">
+                <div className="bg-white rounded-lg p-4 border border-purple-200">
+                  <div className="prose prose-sm max-w-none" dangerouslySetInnerHTML={{ __html: aiResponse }} />
+                </div>
+                <button
+                  type="button"
+                  onClick={handleAcceptAIContent}
+                  className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                >
+                  Accept & Use Content
+                </button>
               </div>
             )}
           </div>
