@@ -10,6 +10,8 @@ A modern, fully manageable CPA firm website built with React, TypeScript, Tailwi
 - **Contact Form**: Integrated contact form with database storage
 - **Dynamic Content**: All content pulled from database
 - **Service Showcase**: Featured services with detailed descriptions
+- **Blog Section**: Featured, Popular, and Newest blog posts on homepage
+- **Blog Pages**: Full blog listing and individual post pages
 - **About Section**: Company values and credentials
 - **Social Media Integration**: Links to Facebook and LinkedIn
 
@@ -17,6 +19,7 @@ A modern, fully manageable CPA firm website built with React, TypeScript, Tailwi
 Control everything from one place:
 - **Site Settings**: Update colors, fonts, contact info, and branding
 - **Services Management**: Add, edit, delete services; mark as featured
+- **Blog Management**: Create and publish blog posts with AI assistance
 - **Contact Submissions**: View and manage all contact form submissions
 - **Real-time Updates**: Changes appear instantly on your website
 
@@ -35,12 +38,18 @@ npm install
 
 2. Environment variables are already set up in `.env` file
 
-3. Start the development server:
+3. (Optional) To enable AI blog assistant, add your Anthropic API key to `.env`:
+```bash
+VITE_ANTHROPIC_API_KEY=your_anthropic_api_key_here
+```
+Get your API key from: https://console.anthropic.com/
+
+4. Start the development server:
 ```bash
 npm run dev
 ```
 
-4. Build for production:
+5. Build for production:
 ```bash
 npm run build
 ```
@@ -64,7 +73,7 @@ To create an admin account, you'll need to sign up through Supabase:
 
 ### Using the Admin Dashboard
 
-Once logged in at `/admin/dashboard`, you have three main tabs:
+Once logged in at `/admin/dashboard`, you have four main tabs:
 
 #### 1. Site Settings
 - **Basic Information**: Update site name and tagline
@@ -87,7 +96,22 @@ Each service includes:
 - Display order
 - Featured status
 
-#### 3. Contact Submissions
+#### 3. Blog Posts
+- **View Blog Posts**: See all blog posts (drafts and published)
+- **Create Post**: Click "New Post" to create a blog entry
+- **AI Assistant**: Use AI to brainstorm topics, research, or generate content
+  - **Brainstorm Mode**: Get blog post ideas and titles
+  - **Research Mode**: Get facts and insights about topics
+  - **Generate Mode**: Create full blog content with HTML formatting
+- **Rich Text Editing**: Format text with headings, bold, italic, lists, and links
+- **Featured Images**: Upload images for blog posts
+- **Featured Posts**: Mark posts to appear on homepage
+- **Draft/Published**: Control visibility of posts
+- **View Analytics**: Track view counts for each post
+
+**Note**: AI assistance requires an Anthropic API key in your `.env` file. The blog editor works fully without AI - it's an optional enhancement.
+
+#### 4. Contact Submissions
 - **View All Submissions**: See all contact form submissions
 - **New Badge**: New submissions are highlighted
 - **Contact Details**: Name, email, phone, and message
@@ -131,6 +155,9 @@ The website uses Supabase with the following tables:
 - **pages**: Website pages and metadata
 - **page_sections**: Dynamic page content sections
 - **services**: Service offerings
+- **blog_posts**: Blog posts with view tracking
+- **blog_categories**: Blog post categories
+- **blog_post_categories**: Many-to-many relationship table
 - **team_members**: Staff profiles
 - **contact_submissions**: Contact form entries
 - **navigation_items**: Custom navigation menus
