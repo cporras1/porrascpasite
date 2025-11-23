@@ -126,6 +126,43 @@ export interface Database {
         Insert: Omit<Database['public']['Tables']['navigation_items']['Row'], 'id' | 'created_at' | 'updated_at'>;
         Update: Partial<Database['public']['Tables']['navigation_items']['Insert']>;
       };
+      blog_posts: {
+        Row: {
+          id: string;
+          title: string;
+          slug: string;
+          excerpt: string | null;
+          content: string;
+          featured_image_url: string | null;
+          author_name: string;
+          is_featured: boolean;
+          is_published: boolean;
+          view_count: number;
+          published_at: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: Omit<Database['public']['Tables']['blog_posts']['Row'], 'id' | 'created_at' | 'updated_at' | 'view_count'>;
+        Update: Partial<Database['public']['Tables']['blog_posts']['Insert']>;
+      };
+      blog_categories: {
+        Row: {
+          id: string;
+          name: string;
+          slug: string;
+          created_at: string;
+        };
+        Insert: Omit<Database['public']['Tables']['blog_categories']['Row'], 'id' | 'created_at'>;
+        Update: Partial<Database['public']['Tables']['blog_categories']['Insert']>;
+      };
+      blog_post_categories: {
+        Row: {
+          blog_post_id: string;
+          category_id: string;
+        };
+        Insert: Database['public']['Tables']['blog_post_categories']['Row'];
+        Update: Partial<Database['public']['Tables']['blog_post_categories']['Row']>;
+      };
     };
   };
 }

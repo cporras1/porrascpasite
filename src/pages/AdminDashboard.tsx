@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { LogOut, Settings, FileText, Briefcase, Mail, Users } from 'lucide-react';
+import { LogOut, Settings, FileText, Briefcase, Mail, Users, PenLine } from 'lucide-react';
 import { SiteSettingsEditor } from '../components/admin/SiteSettingsEditor';
 import { ServicesEditor } from '../components/admin/ServicesEditor';
 import { ContactSubmissions } from '../components/admin/ContactSubmissions';
+import { BlogEditor } from '../components/admin/BlogEditor';
 
-type Tab = 'settings' | 'services' | 'contact';
+type Tab = 'settings' | 'services' | 'contact' | 'blog';
 
 export function AdminDashboard() {
   const [activeTab, setActiveTab] = useState<Tab>('settings');
@@ -26,6 +27,7 @@ export function AdminDashboard() {
   const tabs = [
     { id: 'settings' as Tab, label: 'Site Settings', icon: Settings },
     { id: 'services' as Tab, label: 'Services', icon: Briefcase },
+    { id: 'blog' as Tab, label: 'Blog Posts', icon: PenLine },
     { id: 'contact' as Tab, label: 'Contact Submissions', icon: Mail },
   ];
 
@@ -86,6 +88,7 @@ export function AdminDashboard() {
           <div className="p-6">
             {activeTab === 'settings' && <SiteSettingsEditor />}
             {activeTab === 'services' && <ServicesEditor />}
+            {activeTab === 'blog' && <BlogEditor />}
             {activeTab === 'contact' && <ContactSubmissions />}
           </div>
         </div>
