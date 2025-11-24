@@ -13,20 +13,24 @@ export function Home() {
 
   useEffect(() => {
     if (location.hash) {
-      const elementId = location.hash.substring(1);
-      const element = document.getElementById(elementId);
-      if (element) {
-        const headerHeight = 80;
-        const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
-        const offsetPosition = elementPosition - headerHeight;
+      const scrollToElement = () => {
+        const elementId = location.hash.substring(1);
+        const element = document.getElementById(elementId);
+        if (element) {
+          const headerHeight = 80;
+          const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
+          const offsetPosition = elementPosition - headerHeight;
 
-        setTimeout(() => {
           window.scrollTo({
             top: offsetPosition,
             behavior: 'smooth'
           });
-        }, 100);
-      }
+        }
+      };
+
+      setTimeout(scrollToElement, 300);
+    } else {
+      window.scrollTo(0, 0);
     }
   }, [location]);
 
