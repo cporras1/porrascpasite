@@ -1,19 +1,23 @@
 import { useState } from 'react';
 import { Menu, X, Phone, Mail } from 'lucide-react';
+import { useLocation } from 'react-router-dom';
 import { useSiteSettings } from '../hooks/useSiteSettings';
 
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { settings } = useSiteSettings();
+  const location = useLocation();
 
   if (!settings) return null;
 
+  const isHomePage = location.pathname === '/';
+
   const navItems = [
     { label: 'Home', href: '/' },
-    { label: 'About', href: '/#about' },
-    { label: 'Services', href: '/#services' },
+    { label: 'About', href: isHomePage ? '#about' : '/#about' },
+    { label: 'Services', href: '/services' },
     { label: 'Blog', href: '/blog' },
-    { label: 'Contact', href: '/#contact' },
+    { label: 'Contact', href: isHomePage ? '#contact' : '/#contact' },
   ];
 
   return (
