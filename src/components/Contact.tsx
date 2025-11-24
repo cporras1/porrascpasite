@@ -27,6 +27,12 @@ export function Contact() {
       script.src = 'https://assets.calendly.com/assets/external/widget.js';
       script.type = 'text/javascript';
       script.async = true;
+      script.onload = () => {
+        console.log('Calendly script loaded successfully');
+      };
+      script.onerror = () => {
+        console.error('Failed to load Calendly script');
+      };
       if (!document.querySelector('script[src*="calendly"]')) {
         document.body.appendChild(script);
       }
@@ -36,11 +42,18 @@ export function Contact() {
   const openCalendly = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
     if (settings?.calendly_url) {
-      // @ts-ignore - Calendly is loaded dynamically
-      if (typeof window.Calendly !== 'undefined') {
-        // @ts-ignore
-        window.Calendly.initPopupWidget({ url: settings.calendly_url });
-      } else {
+      try {
+        // @ts-ignore - Calendly is loaded dynamically
+        if (typeof window.Calendly !== 'undefined') {
+          console.log('Opening Calendly popup with URL:', settings.calendly_url);
+          // @ts-ignore
+          window.Calendly.initPopupWidget({ url: settings.calendly_url });
+        } else {
+          console.warn('Calendly not loaded, opening in new tab');
+          window.open(settings.calendly_url, '_blank', 'noopener,noreferrer');
+        }
+      } catch (error) {
+        console.error('Error opening Calendly:', error);
         window.open(settings.calendly_url, '_blank', 'noopener,noreferrer');
       }
     }
