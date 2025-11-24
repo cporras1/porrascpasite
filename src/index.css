@@ -21,8 +21,8 @@ section[id]::before {
 
 @media (min-width: 768px) {
   section[id]::before {
-    height: 280px;
-    margin-top: -280px;
+    height: 200px;
+    margin-top: -200px;
   }
 }
 
