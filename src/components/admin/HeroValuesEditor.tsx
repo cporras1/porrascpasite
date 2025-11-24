@@ -1,5 +1,6 @@
-import { useState, useEffect, FormEvent } from 'react';
-import { Save, Plus, Trash2, GripVertical, Image as ImageIcon } from 'lucide-react';
+import { useState, useEffect, FormEvent, useCallback } from 'react';
+import { Save, Plus, Trash2, GripVertical, Image as ImageIcon, Move, ZoomIn } from 'lucide-react';
+import Cropper from 'react-easy-crop';
 import * as Icons from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { Database } from '../../lib/database.types';
@@ -22,6 +23,9 @@ export function HeroValuesEditor() {
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const [crop, setCrop] = useState({ x: 0, y: 0 });
+  const [zoom, setZoom] = useState(1);
+  const [showImageAdjust, setShowImageAdjust] = useState(false);
 
   useEffect(() => {
     loadContent();
@@ -35,7 +39,10 @@ export function HeroValuesEditor() {
         supabase.from('site_settings').select('values_tagline').limit(1).maybeSingle()
       ]);
 
-      if (heroRes.data) setHeroContent(heroRes.data);
+      if (heroRes.data) {
+        setHeroContent(heroRes.data);
+        setZoom(Number(heroRes.data.hero_image_scale) || 1);
+      }
       if (tilesRes.data) setValueTiles(tilesRes.data);
       if (settingsRes.data) setValuesTagline(settingsRes.data.values_tagline || '');
     } catch (error) {
@@ -65,7 +72,16 @@ export function HeroValuesEditor() {
         .from('site-assets')
         .getPublicUrl(filePath);
 
-      setHeroContent(prev => prev ? { ...prev, hero_image_url: publicUrl } : null);
+      setHeroContent(prev => prev ? {
+        ...prev,
+        hero_image_url: publicUrl,
+        hero_image_scale: 1,
+        hero_image_position_x: 50,
+        hero_image_position_y: 50
+      } : null);
+      setZoom(1);
+      setCrop({ x: 0, y: 0 });
+      setShowImageAdjust(true);
       setMessage({ type: 'success', text: 'Image uploaded successfully!' });
     } catch (error) {
       console.error('Error uploading image:', error);
@@ -77,8 +93,29 @@ export function HeroValuesEditor() {
   };
 
   const handleRemoveImage = () => {
-    setHeroContent(prev => prev ? { ...prev, hero_image_url: null } : null);
+    setHeroContent(prev => prev ? {
+      ...prev,
+      hero_image_url: null,
+      hero_image_scale: 1,
+      hero_image_position_x: 50,
+      hero_image_position_y: 50
+    } : null);
+    setShowImageAdjust(false);
   };
+
+  const onCropComplete = useCallback((croppedArea: any, croppedAreaPixels: any) => {
+    if (!heroContent?.hero_image_url) return;
+
+    const posX = 50 + (crop.x / 10);
+    const posY = 50 + (crop.y / 10);
+
+    setHeroContent(prev => prev ? {
+      ...prev,
+      hero_image_scale: zoom,
+      hero_image_position_x: posX,
+      hero_image_position_y: posY
+    } : null);
+  }, [crop, zoom, heroContent?.hero_image_url]);
 
   const handleHeroSave = async (e: FormEvent) => {
     e.preventDefault();
@@ -92,6 +129,9 @@ export function HeroValuesEditor() {
             heading: heroContent.heading,
             tagline: heroContent.tagline,
             hero_image_url: heroContent.hero_image_url,
+            hero_image_scale: heroContent.hero_image_scale,
+            hero_image_position_x: heroContent.hero_image_position_x,
+            hero_image_position_y: heroContent.hero_image_position_y,
             updated_at: new Date().toISOString()
           })
           .eq('id', heroContent.id);
@@ -103,7 +143,10 @@ export function HeroValuesEditor() {
           .insert({
             heading: heroContent?.heading || '',
             tagline: heroContent?.tagline || '',
-            hero_image_url: heroContent?.hero_image_url || null
+            hero_image_url: heroContent?.hero_image_url || null,
+            hero_image_scale: heroContent?.hero_image_scale || 1,
+            hero_image_position_x: heroContent?.hero_image_position_x || 50,
+            hero_image_position_y: heroContent?.hero_image_position_y || 50
           })
           .select()
           .single();
@@ -255,22 +298,70 @@ export function HeroValuesEditor() {
               Hero Image (Optional)
             </label>
             {heroContent?.hero_image_url ? (
-              <div className="space-y-3">
-                <div className="relative w-full h-48 bg-gray-100 rounded-lg overflow-hidden">
-                  <img
-                    src={heroContent.hero_image_url}
-                    alt="Hero"
-                    className="w-full h-full object-cover"
-                  />
+              <div className="space-y-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <button
+                    type="button"
+                    onClick={() => setShowImageAdjust(!showImageAdjust)}
+                    className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm"
+                  >
+                    <Move size={16} />
+                    {showImageAdjust ? 'Hide' : 'Adjust'} Position & Zoom
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleRemoveImage}
+                    className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm"
+                  >
+                    <Trash2 size={16} />
+                    Remove Image
+                  </button>
                 </div>
-                <button
-                  type="button"
-                  onClick={handleRemoveImage}
-                  className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm"
-                >
-                  <Trash2 size={16} />
-                  Remove Image
-                </button>
+
+                {showImageAdjust ? (
+                  <div className="space-y-4">
+                    <div className="relative w-full h-96 bg-gray-900 rounded-lg overflow-hidden">
+                      <Cropper
+                        image={heroContent.hero_image_url}
+                        crop={crop}
+                        zoom={zoom}
+                        aspect={16 / 9}
+                        onCropChange={setCrop}
+                        onZoomChange={setZoom}
+                        onCropComplete={onCropComplete}
+                        objectFit="horizontal-cover"
+                      />
+                    </div>
+                    <div className="space-y-3">
+                      <div>
+                        <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
+                          <ZoomIn size={16} />
+                          Zoom: {Math.round(zoom * 100)}%
+                        </label>
+                        <input
+                          type="range"
+                          min={1}
+                          max={3}
+                          step={0.1}
+                          value={zoom}
+                          onChange={(e) => setZoom(Number(e.target.value))}
+                          className="w-full"
+                        />
+                      </div>
+                      <p className="text-xs text-gray-500">
+                        Drag the image to reposition it. Use the slider to zoom in/out. Changes will be saved when you click "Save Hero Content".
+                      </p>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="relative w-full h-48 bg-gray-100 rounded-lg overflow-hidden">
+                    <img
+                      src={heroContent.hero_image_url}
+                      alt="Hero"
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                )}
               </div>
             ) : (
               <div className="space-y-2">

@@ -11,14 +11,23 @@ export function Hero() {
   const heading = heroContent?.heading || 'Professional Accounting & Tax Services';
   const tagline = heroContent?.tagline || 'Combining expertise, experience, and dedication to provide outstanding service to our clients in El Paso and surrounding areas.';
 
+  const imageScale = Number(heroContent?.hero_image_scale) || 1;
+  const imagePosX = Number(heroContent?.hero_image_position_x) || 50;
+  const imagePosY = Number(heroContent?.hero_image_position_y) || 50;
+
   return (
     <section className="relative bg-gradient-to-br from-blue-50 to-white py-20 md:py-32 overflow-hidden">
       {heroContent?.hero_image_url && (
         <div className="absolute inset-0 z-0">
-          <img
-            src={heroContent.hero_image_url}
-            alt="Hero background"
-            className="w-full h-full object-cover opacity-20"
+          <div
+            className="w-full h-full"
+            style={{
+              backgroundImage: `url(${heroContent.hero_image_url})`,
+              backgroundSize: `${imageScale * 100}%`,
+              backgroundPosition: `${imagePosX}% ${imagePosY}%`,
+              backgroundRepeat: 'no-repeat',
+              opacity: 0.2
+            }}
           />
           <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-white opacity-80" />
         </div>
