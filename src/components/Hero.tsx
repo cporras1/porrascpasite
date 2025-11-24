@@ -41,7 +41,7 @@ export function Hero() {
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
             {heading}
           </h1>
-          <p className="text-xl md:text-2xl text-gray-600 mb-8 leading-relaxed">
+          <p className="text-xl md:text-2xl text-black mb-8 leading-relaxed">
             {subheading}
           </p>
           <div className="flex flex-col sm:flex-row gap-4">
