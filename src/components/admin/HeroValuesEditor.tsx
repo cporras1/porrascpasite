@@ -1,6 +1,7 @@
 import { useState, useEffect, FormEvent, useCallback } from 'react';
 import { Save, Plus, Trash2, GripVertical, Image as ImageIcon, Move, ZoomIn } from 'lucide-react';
 import Cropper from 'react-easy-crop';
+import 'react-easy-crop/react-easy-crop.css';
 import * as Icons from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { Database } from '../../lib/database.types';
