@@ -14,10 +14,35 @@ export function Contact() {
   });
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
 
+  useEffect(() => {
+    if (settings?.calendly_url) {
+      const link = document.createElement('link');
+      link.href = 'https://assets.calendly.com/assets/external/widget.css';
+      link.rel = 'stylesheet';
+      if (!document.querySelector('link[href*="calendly"]')) {
+        document.head.appendChild(link);
+      }
+
+      const script = document.createElement('script');
+      script.src = 'https://assets.calendly.com/assets/external/widget.js';
+      script.type = 'text/javascript';
+      script.async = true;
+      if (!document.querySelector('script[src*="calendly"]')) {
+        document.body.appendChild(script);
+      }
+    }
+  }, [settings?.calendly_url]);
+
   const openCalendly = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
     if (settings?.calendly_url) {
-      window.open(settings.calendly_url, '_blank', 'noopener,noreferrer');
+      // @ts-ignore - Calendly is loaded dynamically
+      if (typeof window.Calendly !== 'undefined') {
+        // @ts-ignore
+        window.Calendly.initPopupWidget({ url: settings.calendly_url });
+      } else {
+        window.open(settings.calendly_url, '_blank', 'noopener,noreferrer');
+      }
     }
   };
 
