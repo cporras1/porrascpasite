@@ -105,7 +105,7 @@ export function BlogPostPage() {
           )}
 
           <div
-            className="prose prose-lg max-w-none prose-headings:text-gray-900 prose-p:text-gray-700 prose-a:no-underline hover:prose-a:underline prose-img:rounded-lg prose-img:shadow-md"
+            className="prose prose-lg max-w-none prose-headings:font-bold prose-headings:text-gray-900 prose-h2:text-3xl prose-h2:mt-8 prose-h2:mb-4 prose-h3:text-2xl prose-h3:mt-6 prose-h3:mb-3 prose-p:text-gray-700 prose-p:leading-relaxed prose-p:mb-4 prose-ul:my-4 prose-ul:list-disc prose-ul:pl-6 prose-li:text-gray-700 prose-li:mb-2 prose-a:no-underline hover:prose-a:underline prose-strong:font-semibold prose-strong:text-gray-900 prose-img:rounded-lg prose-img:shadow-md"
             style={{
               '--tw-prose-links': settings.primary_color,
             } as any}
