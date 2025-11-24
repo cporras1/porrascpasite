@@ -15,17 +15,31 @@ export function Contact() {
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
 
   useEffect(() => {
-    if (settings?.calendly_url) {
+    if (settings?.calendly_url && !document.querySelector('script[src*="calendly"]')) {
+      const link = document.createElement('link');
+      link.href = 'https://assets.calendly.com/assets/external/widget.css';
+      link.rel = 'stylesheet';
+      document.head.appendChild(link);
+
       const script = document.createElement('script');
       script.src = 'https://assets.calendly.com/assets/external/widget.js';
       script.async = true;
       document.body.appendChild(script);
-
-      return () => {
-        document.body.removeChild(script);
-      };
     }
   }, [settings?.calendly_url]);
+
+  const openCalendly = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    if (settings?.calendly_url) {
+      // @ts-ignore - Calendly is loaded dynamically
+      if (typeof window.Calendly !== 'undefined') {
+        // @ts-ignore
+        window.Calendly.initPopupWidget({ url: settings.calendly_url });
+      } else {
+        window.open(settings.calendly_url, '_blank');
+      }
+    }
+  };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -146,11 +160,7 @@ export function Contact() {
                     <h4 className="font-semibold text-gray-900 mb-1">Schedule a Meeting</h4>
                     <a
                       href={settings.calendly_url}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        // @ts-ignore - Calendly is loaded dynamically
-                        window.Calendly?.initPopupWidget({ url: settings.calendly_url });
-                      }}
+                      onClick={openCalendly}
                       className="inline-block px-4 py-2 rounded-lg text-white font-medium transition-all hover:opacity-90 mt-2"
                       style={{ backgroundColor: settings.secondary_color }}
                     >
