@@ -30,7 +30,7 @@ export function HomeHeader() {
             const width = window.innerWidth;
             if (width >= 1024) return 50;
             if (width >= 768) return 280;
-            return 450;
+            return 430;
           };
 
           const headerHeight = getHeaderHeight();
