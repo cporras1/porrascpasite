@@ -28,7 +28,7 @@ export function HomeHeader() {
         if (element) {
           const getHeaderHeight = () => {
             const width = window.innerWidth;
-            if (width >= 1024) return 240;
+            if (width >= 1024) return 90;
             if (width >= 768) return 280;
             return 430;
           };
