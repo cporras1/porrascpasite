@@ -172,6 +172,20 @@ export interface Database {
         Insert: Database['public']['Tables']['blog_post_categories']['Row'];
         Update: Partial<Database['public']['Tables']['blog_post_categories']['Row']>;
       };
+      certifications: {
+        Row: {
+          id: string;
+          title: string;
+          description: string;
+          badge_url: string | null;
+          display_order: number;
+          is_active: boolean;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: Omit<Database['public']['Tables']['certifications']['Row'], 'id' | 'created_at' | 'updated_at'>;
+        Update: Partial<Database['public']['Tables']['certifications']['Insert']>;
+      };
     };
   };
 }
