@@ -31,6 +31,7 @@ export interface Database {
           dopecfo_description: string;
           dopecfo_badge_url: string | null;
           calendly_url: string | null;
+          values_tagline: string | null;
           created_at: string;
           updated_at: string;
         };
@@ -185,6 +186,37 @@ export interface Database {
         };
         Insert: Omit<Database['public']['Tables']['certifications']['Row'], 'id' | 'created_at' | 'updated_at'>;
         Update: Partial<Database['public']['Tables']['certifications']['Insert']>;
+      };
+      hero_content: {
+        Row: {
+          id: string;
+          heading: string;
+          subheading: string | null;
+          cta_text: string | null;
+          cta_link: string | null;
+          hero_image_url: string | null;
+          hero_image_scale: number;
+          hero_image_position_x: number;
+          hero_image_position_y: number;
+          hero_image_opacity: number;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: Omit<Database['public']['Tables']['hero_content']['Row'], 'id' | 'created_at' | 'updated_at'>;
+        Update: Partial<Database['public']['Tables']['hero_content']['Insert']>;
+      };
+      value_tiles: {
+        Row: {
+          id: string;
+          icon: string;
+          title: string;
+          description: string;
+          display_order: number;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: Omit<Database['public']['Tables']['value_tiles']['Row'], 'id' | 'created_at' | 'updated_at'>;
+        Update: Partial<Database['public']['Tables']['value_tiles']['Insert']>;
       };
     };
   };

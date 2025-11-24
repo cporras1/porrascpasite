@@ -9,11 +9,12 @@ export function Hero() {
   if (!settings || loading) return null;
 
   const heading = heroContent?.heading || 'Professional Accounting & Tax Services';
-  const tagline = heroContent?.tagline || 'Combining expertise, experience, and dedication to provide outstanding service to our clients in El Paso and surrounding areas.';
+  const subheading = heroContent?.subheading || 'Combining expertise, experience, and dedication to provide outstanding service to our clients in El Paso and surrounding areas.';
 
   const imageScale = Number(heroContent?.hero_image_scale) || 1;
   const imagePosX = Number(heroContent?.hero_image_position_x) || 50;
   const imagePosY = Number(heroContent?.hero_image_position_y) || 50;
+  const imageOpacity = Number(heroContent?.hero_image_opacity) ?? 0.3;
 
   return (
     <section className="relative bg-gradient-to-br from-blue-50 to-white py-20 md:py-32 overflow-hidden">
@@ -26,7 +27,7 @@ export function Hero() {
               backgroundSize: `${imageScale * 100}%`,
               backgroundPosition: `${imagePosX}% ${imagePosY}%`,
               backgroundRepeat: 'no-repeat',
-              opacity: 0.2
+              opacity: imageOpacity
             }}
           />
           <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-white opacity-80" />
@@ -39,7 +40,7 @@ export function Hero() {
             {heading}
           </h1>
           <p className="text-xl md:text-2xl text-gray-600 mb-8 leading-relaxed">
-            {tagline}
+            {subheading}
           </p>
           <div className="flex flex-col sm:flex-row gap-4">
             <a

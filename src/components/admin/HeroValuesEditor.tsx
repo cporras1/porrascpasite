@@ -25,6 +25,7 @@ export function HeroValuesEditor() {
   const [zoom, setZoom] = useState(1);
   const [positionX, setPositionX] = useState(50);
   const [positionY, setPositionY] = useState(50);
+  const [opacity, setOpacity] = useState(0.3);
   const [showImageAdjust, setShowImageAdjust] = useState(false);
 
   useEffect(() => {
@@ -44,6 +45,7 @@ export function HeroValuesEditor() {
         setZoom(Number(heroRes.data.hero_image_scale) || 1);
         setPositionX(Number(heroRes.data.hero_image_position_x) || 50);
         setPositionY(Number(heroRes.data.hero_image_position_y) || 50);
+        setOpacity(Number(heroRes.data.hero_image_opacity) || 0.3);
       }
       if (tilesRes.data) setValueTiles(tilesRes.data);
       if (settingsRes.data) setValuesTagline(settingsRes.data.values_tagline || '');
@@ -79,7 +81,8 @@ export function HeroValuesEditor() {
         hero_image_url: publicUrl,
         hero_image_scale: 1,
         hero_image_position_x: 50,
-        hero_image_position_y: 50
+        hero_image_position_y: 50,
+        hero_image_opacity: 0.3
       } : null);
       setZoom(1);
       setCrop({ x: 0, y: 0 });
@@ -111,7 +114,8 @@ export function HeroValuesEditor() {
       ...prev,
       hero_image_scale: zoom,
       hero_image_position_x: positionX,
-      hero_image_position_y: positionY
+      hero_image_position_y: positionY,
+      hero_image_opacity: opacity
     } : null);
   };
 
@@ -119,7 +123,7 @@ export function HeroValuesEditor() {
     if (showImageAdjust) {
       handlePositionChange();
     }
-  }, [zoom, positionX, positionY, showImageAdjust]);
+  }, [zoom, positionX, positionY, opacity, showImageAdjust]);
 
   const handleHeroSave = async (e: FormEvent) => {
     e.preventDefault();
@@ -131,11 +135,12 @@ export function HeroValuesEditor() {
           .from('hero_content')
           .update({
             heading: heroContent.heading,
-            tagline: heroContent.tagline,
+            subheading: heroContent.subheading,
             hero_image_url: heroContent.hero_image_url,
             hero_image_scale: heroContent.hero_image_scale,
             hero_image_position_x: heroContent.hero_image_position_x,
             hero_image_position_y: heroContent.hero_image_position_y,
+            hero_image_opacity: heroContent.hero_image_opacity,
             updated_at: new Date().toISOString()
           })
           .eq('id', heroContent.id);
@@ -146,11 +151,12 @@ export function HeroValuesEditor() {
           .from('hero_content')
           .insert({
             heading: heroContent?.heading || '',
-            tagline: heroContent?.tagline || '',
+            subheading: heroContent?.subheading || '',
             hero_image_url: heroContent?.hero_image_url || null,
             hero_image_scale: heroContent?.hero_image_scale || 1,
             hero_image_position_x: heroContent?.hero_image_position_x || 50,
-            hero_image_position_y: heroContent?.hero_image_position_y || 50
+            hero_image_position_y: heroContent?.hero_image_position_y || 50,
+            hero_image_opacity: heroContent?.hero_image_opacity || 0.3
           })
           .select()
           .single();
@@ -289,8 +295,8 @@ export function HeroValuesEditor() {
               Tagline
             </label>
             <textarea
-              value={heroContent?.tagline || ''}
-              onChange={(e) => setHeroContent(prev => prev ? { ...prev, tagline: e.target.value } : null)}
+              value={heroContent?.subheading || ''}
+              onChange={(e) => setHeroContent(prev => prev ? { ...prev, subheading: e.target.value } : null)}
               rows={3}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
               required
@@ -331,7 +337,8 @@ export function HeroValuesEditor() {
                           backgroundImage: `url(${heroContent.hero_image_url})`,
                           backgroundSize: `${zoom * 100}%`,
                           backgroundPosition: `${positionX}% ${positionY}%`,
-                          backgroundRepeat: 'no-repeat'
+                          backgroundRepeat: 'no-repeat',
+                          opacity: opacity
                         }}
                       />
                     </div>
@@ -381,8 +388,23 @@ export function HeroValuesEditor() {
                           className="w-full"
                         />
                       </div>
+                      <div>
+                        <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
+                          <ImageIcon size={16} />
+                          Image Opacity: {Math.round(opacity * 100)}%
+                        </label>
+                        <input
+                          type="range"
+                          min={0}
+                          max={1}
+                          step={0.05}
+                          value={opacity}
+                          onChange={(e) => setOpacity(Number(e.target.value))}
+                          className="w-full"
+                        />
+                      </div>
                       <p className="text-xs text-gray-500">
-                        Use the sliders to adjust image position and scale. Changes will be saved when you click "Save Hero Content".
+                        Use the sliders to adjust image position, scale, and opacity. Lower opacity makes text more readable. Changes will be saved when you click "Save Hero Content".
                       </p>
                     </div>
                   </div>
