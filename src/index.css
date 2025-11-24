@@ -3,11 +3,17 @@
 @tailwind utilities;
 
 html {
-  scroll-padding-top: 140px;
+  scroll-padding-top: 120px;
 }
 
 section[id] {
-  scroll-margin-top: 140px;
+  scroll-margin-top: 120px;
+}
+
+@media (max-width: 768px) {
+  section[id] {
+    scroll-margin-top: 100px;
+  }
 }
 
 .wysiwyg-editor .ql-container {
