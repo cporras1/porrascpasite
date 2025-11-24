@@ -13,25 +13,33 @@ function ScrollToHashElement() {
 
   useEffect(() => {
     const hash = location.hash;
-    if (hash) {
-      const id = hash.replace('#', '');
 
-      const scrollToElement = () => {
-        const element = document.getElementById(id);
-        if (element) {
-          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          window.scrollBy(0, -80);
-        }
-      };
-
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          setTimeout(scrollToElement, 200);
-        });
-      });
-    } else {
+    if (!hash) {
       window.scrollTo(0, 0);
+      return;
     }
+
+    const id = hash.replace('#', '');
+    let attempts = 0;
+    const maxAttempts = 50;
+
+    const tryScroll = () => {
+      const element = document.getElementById(id);
+
+      if (element) {
+        const yOffset = -80;
+        const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+        window.scrollTo({ top: y, behavior: 'smooth' });
+        return;
+      }
+
+      attempts++;
+      if (attempts < maxAttempts) {
+        requestAnimationFrame(tryScroll);
+      }
+    };
+
+    setTimeout(tryScroll, 100);
   }, [location]);
 
   return null;
