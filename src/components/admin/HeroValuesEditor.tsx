@@ -20,6 +20,7 @@ export function HeroValuesEditor() {
   const [valuesTagline, setValuesTagline] = useState('');
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
   useEffect(() => {
@@ -44,6 +45,41 @@ export function HeroValuesEditor() {
     }
   };
 
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploading(true);
+    try {
+      const fileExt = file.name.split('.').pop();
+      const fileName = `hero-${Date.now()}.${fileExt}`;
+      const filePath = `hero/${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('site-assets')
+        .upload(filePath, file, { upsert: true });
+
+      if (uploadError) throw uploadError;
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('site-assets')
+        .getPublicUrl(filePath);
+
+      setHeroContent(prev => prev ? { ...prev, hero_image_url: publicUrl } : null);
+      setMessage({ type: 'success', text: 'Image uploaded successfully!' });
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      setMessage({ type: 'error', text: 'Failed to upload image.' });
+    } finally {
+      setUploading(false);
+      setTimeout(() => setMessage(null), 3000);
+    }
+  };
+
+  const handleRemoveImage = () => {
+    setHeroContent(prev => prev ? { ...prev, hero_image_url: null } : null);
+  };
+
   const handleHeroSave = async (e: FormEvent) => {
     e.preventDefault();
     setSaving(true);
@@ -55,6 +91,7 @@ export function HeroValuesEditor() {
           .update({
             heading: heroContent.heading,
             tagline: heroContent.tagline,
+            hero_image_url: heroContent.hero_image_url,
             updated_at: new Date().toISOString()
           })
           .eq('id', heroContent.id);
@@ -65,7 +102,8 @@ export function HeroValuesEditor() {
           .from('hero_content')
           .insert({
             heading: heroContent?.heading || '',
-            tagline: heroContent?.tagline || ''
+            tagline: heroContent?.tagline || '',
+            hero_image_url: heroContent?.hero_image_url || null
           })
           .select()
           .single();
@@ -210,6 +248,47 @@ export function HeroValuesEditor() {
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
               required
             />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Hero Image (Optional)
+            </label>
+            {heroContent?.hero_image_url ? (
+              <div className="space-y-3">
+                <div className="relative w-full h-48 bg-gray-100 rounded-lg overflow-hidden">
+                  <img
+                    src={heroContent.hero_image_url}
+                    alt="Hero"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <button
+                  type="button"
+                  onClick={handleRemoveImage}
+                  className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm"
+                >
+                  <Trash2 size={16} />
+                  Remove Image
+                </button>
+              </div>
+            ) : (
+              <div className="space-y-2">
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageUpload}
+                  disabled={uploading}
+                  className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 disabled:opacity-50"
+                />
+                {uploading && (
+                  <p className="text-sm text-gray-500">Uploading...</p>
+                )}
+                <p className="text-xs text-gray-500">
+                  Upload an image to display on the hero section. Recommended size: 1920x1080px
+                </p>
+              </div>
+            )}
           </div>
 
           <button

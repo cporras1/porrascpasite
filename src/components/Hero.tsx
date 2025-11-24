@@ -12,8 +12,19 @@ export function Hero() {
   const tagline = heroContent?.tagline || 'Combining expertise, experience, and dedication to provide outstanding service to our clients in El Paso and surrounding areas.';
 
   return (
-    <section className="relative bg-gradient-to-br from-blue-50 to-white py-20 md:py-32">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="relative bg-gradient-to-br from-blue-50 to-white py-20 md:py-32 overflow-hidden">
+      {heroContent?.hero_image_url && (
+        <div className="absolute inset-0 z-0">
+          <img
+            src={heroContent.hero_image_url}
+            alt="Hero background"
+            className="w-full h-full object-cover opacity-20"
+          />
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-white opacity-80" />
+        </div>
+      )}
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="max-w-3xl">
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
             {heading}
@@ -46,12 +57,15 @@ export function Hero() {
           </div>
         </div>
       </div>
-      <div
-        className="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l opacity-30 pointer-events-none"
-        style={{
-          backgroundImage: `linear-gradient(to left, ${settings.accent_color}40, transparent)`
-        }}
-      />
+
+      {!heroContent?.hero_image_url && (
+        <div
+          className="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l opacity-30 pointer-events-none"
+          style={{
+            backgroundImage: `linear-gradient(to left, ${settings.accent_color}40, transparent)`
+          }}
+        />
+      )}
     </section>
   );
 }
