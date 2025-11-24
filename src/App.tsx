@@ -19,19 +19,16 @@ function ScrollToHashElement() {
       const scrollToElement = () => {
         const element = document.getElementById(id);
         if (element) {
-          const headerOffset = 80;
-          const elementPosition = element.offsetTop;
-          const offsetPosition = elementPosition - headerOffset;
-
-          window.scrollTo({
-            top: offsetPosition,
-            behavior: 'smooth'
-          });
+          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          window.scrollBy(0, -80);
         }
       };
 
-      const timeoutId = setTimeout(scrollToElement, 100);
-      return () => clearTimeout(timeoutId);
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          setTimeout(scrollToElement, 200);
+        });
+      });
     } else {
       window.scrollTo(0, 0);
     }
