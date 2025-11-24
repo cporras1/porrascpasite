@@ -26,7 +26,14 @@ export function HomeHeader() {
       } else {
         const element = document.querySelector(href);
         if (element) {
-          const headerHeight = 380;
+          const getHeaderHeight = () => {
+            const width = window.innerWidth;
+            if (width >= 1024) return 200;
+            if (width >= 768) return 280;
+            return 380;
+          };
+
+          const headerHeight = getHeaderHeight();
           const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
           const offsetPosition = elementPosition - headerHeight;
 

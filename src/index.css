@@ -19,6 +19,20 @@ section[id]::before {
   pointer-events: none;
 }
 
+@media (min-width: 768px) {
+  section[id]::before {
+    height: 280px;
+    margin-top: -280px;
+  }
+}
+
+@media (min-width: 1024px) {
+  section[id]::before {
+    height: 200px;
+    margin-top: -200px;
+  }
+}
+
 .wysiwyg-editor .ql-container {
   min-height: 300px;
   font-size: 16px;
