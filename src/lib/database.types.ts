@@ -25,9 +25,11 @@ export interface Database {
           show_ccifp: boolean;
           ccifp_title: string;
           ccifp_description: string;
+          ccifp_badge_url: string | null;
           show_dopecfo: boolean;
           dopecfo_title: string;
           dopecfo_description: string;
+          dopecfo_badge_url: string | null;
           created_at: string;
           updated_at: string;
         };

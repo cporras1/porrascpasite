@@ -71,13 +71,26 @@ export function About() {
                 className="rounded-2xl p-8 md:p-12"
                 style={{ backgroundColor: `${settings.accent_color}10` }}
               >
-                <div className="max-w-3xl mx-auto text-center">
-                  <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
-                    {settings.ccifp_title}
-                  </h3>
-                  <p className="text-lg text-gray-600 leading-relaxed">
-                    {settings.ccifp_description}
-                  </p>
+                <div className="max-w-3xl mx-auto">
+                  <div className="flex flex-col md:flex-row items-center gap-6 text-center md:text-left">
+                    {settings.ccifp_badge_url && (
+                      <div className="flex-shrink-0">
+                        <img
+                          src={settings.ccifp_badge_url}
+                          alt="CCIFP Badge"
+                          className="h-24 w-auto object-contain"
+                        />
+                      </div>
+                    )}
+                    <div className="flex-1">
+                      <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
+                        {settings.ccifp_title}
+                      </h3>
+                      <p className="text-lg text-gray-600 leading-relaxed">
+                        {settings.ccifp_description}
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </div>
             )}
@@ -87,13 +100,26 @@ export function About() {
                 className="rounded-2xl p-8 md:p-12"
                 style={{ backgroundColor: `${settings.secondary_color}10` }}
               >
-                <div className="max-w-3xl mx-auto text-center">
-                  <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
-                    {settings.dopecfo_title}
-                  </h3>
-                  <p className="text-lg text-gray-600 leading-relaxed">
-                    {settings.dopecfo_description}
-                  </p>
+                <div className="max-w-3xl mx-auto">
+                  <div className="flex flex-col md:flex-row items-center gap-6 text-center md:text-left">
+                    {settings.dopecfo_badge_url && (
+                      <div className="flex-shrink-0">
+                        <img
+                          src={settings.dopecfo_badge_url}
+                          alt="DopeCFO Badge"
+                          className="h-24 w-auto object-contain"
+                        />
+                      </div>
+                    )}
+                    <div className="flex-1">
+                      <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
+                        {settings.dopecfo_title}
+                      </h3>
+                      <p className="text-lg text-gray-600 leading-relaxed">
+                        {settings.dopecfo_description}
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </div>
             )}
