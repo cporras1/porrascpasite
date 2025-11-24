@@ -1,20 +1,25 @@
 import { useSiteSettings } from '../hooks/useSiteSettings';
+import { useHeroContent } from '../hooks/useHeroContent';
 import { ArrowRight } from 'lucide-react';
 
 export function Hero() {
   const { settings } = useSiteSettings();
+  const { heroContent, loading } = useHeroContent();
 
-  if (!settings) return null;
+  if (!settings || loading) return null;
+
+  const heading = heroContent?.heading || 'Professional Accounting & Tax Services';
+  const tagline = heroContent?.tagline || 'Combining expertise, experience, and dedication to provide outstanding service to our clients in El Paso and surrounding areas.';
 
   return (
     <section className="relative bg-gradient-to-br from-blue-50 to-white py-20 md:py-32">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-3xl">
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
-            Professional Accounting & Tax Services
+            {heading}
           </h1>
           <p className="text-xl md:text-2xl text-gray-600 mb-8 leading-relaxed">
-            Combining expertise, experience, and dedication to provide outstanding service to our clients in El Paso and surrounding areas.
+            {tagline}
           </p>
           <div className="flex flex-col sm:flex-row gap-4">
             <a

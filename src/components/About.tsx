@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
-import { Shield, Zap, Award } from 'lucide-react';
+import * as Icons from 'lucide-react';
 import { useSiteSettings } from '../hooks/useSiteSettings';
+import { useValueTiles } from '../hooks/useValueTiles';
 import { supabase } from '../lib/supabase';
 import { Database } from '../lib/database.types';
 
@@ -8,6 +9,7 @@ type Certification = Database['public']['Tables']['certifications']['Row'];
 
 export function About() {
   const { settings } = useSiteSettings();
+  const { valueTiles, loading: tilesLoading } = useValueTiles();
   const [certifications, setCertifications] = useState<Certification[]>([]);
 
   useEffect(() => {
@@ -24,25 +26,11 @@ export function About() {
     if (data) setCertifications(data);
   };
 
-  if (!settings) return null;
+  const getIconComponent = (iconName: string) => {
+    return (Icons as any)[iconName] || Icons.Shield;
+  };
 
-  const values = [
-    {
-      icon: Shield,
-      title: 'Professionalism',
-      description: 'By combining our expertise, experience and the energy of our staff, each client receives close personal and professional attention. We are considered one of the leading firms in our area.',
-    },
-    {
-      icon: Zap,
-      title: 'Responsiveness',
-      description: 'We provide comprehensive financial services to individuals and businesses. We grow through client referrals and are known for competent advice and fast, accurate personnel.',
-    },
-    {
-      icon: Award,
-      title: 'Quality',
-      description: 'Our primary goal is to be a trusted advisor providing insightful financial advice. We are committed to continuous professional education to help clients make informed financial decisions.',
-    },
-  ];
+  if (!settings || tilesLoading) return null;
 
   return (
     <section id="about" className="py-20 bg-white">
@@ -52,16 +40,16 @@ export function About() {
             Our Values
           </h2>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            At {settings.site_name}, we are committed to outstanding service to our clients
+            {settings.values_tagline || `At ${settings.site_name}, we are committed to outstanding service to our clients`}
           </p>
         </div>
 
         <div className="grid md:grid-cols-3 gap-8">
-          {values.map((value) => {
-            const IconComponent = value.icon;
+          {valueTiles.map((tile) => {
+            const IconComponent = tile.icon_url ? null : getIconComponent(tile.icon);
             return (
               <div
-                key={value.title}
+                key={tile.id}
                 className="text-center p-8 rounded-xl border border-gray-200 hover:shadow-lg transition-all duration-300"
                 style={{ '--hover-border-color': settings.accent_color } as any}
                 onMouseEnter={(e) => e.currentTarget.style.borderColor = settings.accent_color}
@@ -71,13 +59,17 @@ export function About() {
                   className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6"
                   style={{ backgroundColor: `${settings.secondary_color}15` }}
                 >
-                  <IconComponent size={32} style={{ color: settings.secondary_color }} />
+                  {tile.icon_url ? (
+                    <img src={tile.icon_url} alt={tile.title} className="w-8 h-8 object-contain" />
+                  ) : IconComponent ? (
+                    <IconComponent size={32} style={{ color: settings.secondary_color }} />
+                  ) : null}
                 </div>
                 <h3 className="text-2xl font-semibold text-gray-900 mb-4">
-                  {value.title}
+                  {tile.title}
                 </h3>
                 <p className="text-gray-600 leading-relaxed">
-                  {value.description}
+                  {tile.description}
                 </p>
               </div>
             );
