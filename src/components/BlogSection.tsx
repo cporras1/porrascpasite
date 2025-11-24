@@ -6,6 +6,10 @@ import { useSiteSettings } from '../hooks/useSiteSettings';
 type ViewMode = 'featured' | 'popular' | 'newest';
 
 export function BlogSection() {
+  return <section id="blog"><BlogSectionContent /></section>;
+}
+
+function BlogSectionContent() {
   const [viewMode, setViewMode] = useState<ViewMode>('featured');
   const { posts: featuredPosts, loading: featuredLoading } = useBlogPosts({ featured: true, limit: 3 });
   const { posts: popularPosts, loading: popularLoading } = usePopularPosts(3);
