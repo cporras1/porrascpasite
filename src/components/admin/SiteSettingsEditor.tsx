@@ -187,6 +187,7 @@ export function SiteSettingsEditor() {
           facebook_url: settings.facebook_url,
           linkedin_url: settings.linkedin_url,
           footer_text: settings.footer_text,
+          calendly_url: settings.calendly_url,
           show_ccifp: settings.show_ccifp,
           ccifp_title: settings.ccifp_title,
           ccifp_description: settings.ccifp_description,
@@ -451,6 +452,22 @@ export function SiteSettingsEditor() {
               onChange={(e) => setSettings({ ...settings, address_line2: e.target.value })}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
+          </div>
+
+          <div className="md:col-span-2">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Calendly URL
+            </label>
+            <input
+              type="url"
+              value={settings.calendly_url || ''}
+              onChange={(e) => setSettings({ ...settings, calendly_url: e.target.value })}
+              placeholder="https://calendly.com/yourname/meeting"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            />
+            <p className="text-sm text-gray-500 mt-2">
+              Enter your Calendly scheduling link to enable calendar booking in the contact section
+            </p>
           </div>
         </div>
       </div>

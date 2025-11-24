@@ -30,6 +30,7 @@ export interface Database {
           dopecfo_title: string;
           dopecfo_description: string;
           dopecfo_badge_url: string | null;
+          calendly_url: string | null;
           created_at: string;
           updated_at: string;
         };

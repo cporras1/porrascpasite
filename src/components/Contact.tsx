@@ -1,5 +1,5 @@
-import { useState, FormEvent } from 'react';
-import { MapPin, Phone, Mail, Clock } from 'lucide-react';
+import { useState, FormEvent, useEffect } from 'react';
+import { MapPin, Phone, Mail, Clock, Calendar } from 'lucide-react';
 import { useSiteSettings } from '../hooks/useSiteSettings';
 import { supabase } from '../lib/supabase';
 
@@ -13,6 +13,19 @@ export function Contact() {
     message: '',
   });
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
+
+  useEffect(() => {
+    if (settings?.calendly_url) {
+      const script = document.createElement('script');
+      script.src = 'https://assets.calendly.com/assets/external/widget.js';
+      script.async = true;
+      document.body.appendChild(script);
+
+      return () => {
+        document.body.removeChild(script);
+      };
+    }
+  }, [settings?.calendly_url]);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -120,6 +133,32 @@ export function Contact() {
                   </p>
                 </div>
               </div>
+
+              {settings.calendly_url && (
+                <div className="flex items-start gap-4">
+                  <div
+                    className="w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0"
+                    style={{ backgroundColor: `${settings.accent_color}15` }}
+                  >
+                    <Calendar size={24} style={{ color: settings.accent_color }} />
+                  </div>
+                  <div className="flex-1">
+                    <h4 className="font-semibold text-gray-900 mb-1">Schedule a Meeting</h4>
+                    <a
+                      href={settings.calendly_url}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        // @ts-ignore - Calendly is loaded dynamically
+                        window.Calendly?.initPopupWidget({ url: settings.calendly_url });
+                      }}
+                      className="inline-block px-4 py-2 rounded-lg text-white font-medium transition-all hover:opacity-90 mt-2"
+                      style={{ backgroundColor: settings.secondary_color }}
+                    >
+                      Book an Appointment
+                    </a>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 
