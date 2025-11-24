@@ -13,8 +13,8 @@ section[id] {
 section[id]::before {
   content: '';
   display: block;
-  height: 250px;
-  margin-top: -250px;
+  height: 350px;
+  margin-top: -350px;
   visibility: hidden;
   pointer-events: none;
 }
