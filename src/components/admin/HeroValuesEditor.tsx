@@ -1,7 +1,5 @@
 import { useState, useEffect, FormEvent, useCallback } from 'react';
 import { Save, Plus, Trash2, GripVertical, Image as ImageIcon, Move, ZoomIn } from 'lucide-react';
-import Cropper from 'react-easy-crop';
-import 'react-easy-crop/react-easy-crop.css';
 import * as Icons from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { Database } from '../../lib/database.types';
@@ -24,8 +22,9 @@ export function HeroValuesEditor() {
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
-  const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
+  const [positionX, setPositionX] = useState(50);
+  const [positionY, setPositionY] = useState(50);
   const [showImageAdjust, setShowImageAdjust] = useState(false);
 
   useEffect(() => {
@@ -43,6 +42,8 @@ export function HeroValuesEditor() {
       if (heroRes.data) {
         setHeroContent(heroRes.data);
         setZoom(Number(heroRes.data.hero_image_scale) || 1);
+        setPositionX(Number(heroRes.data.hero_image_position_x) || 50);
+        setPositionY(Number(heroRes.data.hero_image_position_y) || 50);
       }
       if (tilesRes.data) setValueTiles(tilesRes.data);
       if (settingsRes.data) setValuesTagline(settingsRes.data.values_tagline || '');
@@ -104,19 +105,21 @@ export function HeroValuesEditor() {
     setShowImageAdjust(false);
   };
 
-  const onCropComplete = useCallback((croppedArea: any, croppedAreaPixels: any) => {
-    if (!heroContent?.hero_image_url) return;
-
-    const posX = 50 + (crop.x / 10);
-    const posY = 50 + (crop.y / 10);
-
+  const handlePositionChange = () => {
+    if (!heroContent) return;
     setHeroContent(prev => prev ? {
       ...prev,
       hero_image_scale: zoom,
-      hero_image_position_x: posX,
-      hero_image_position_y: posY
+      hero_image_position_x: positionX,
+      hero_image_position_y: positionY
     } : null);
-  }, [crop, zoom, heroContent?.hero_image_url]);
+  };
+
+  useEffect(() => {
+    if (showImageAdjust) {
+      handlePositionChange();
+    }
+  }, [zoom, positionX, positionY, showImageAdjust]);
 
   const handleHeroSave = async (e: FormEvent) => {
     e.preventDefault();
@@ -322,22 +325,21 @@ export function HeroValuesEditor() {
                 {showImageAdjust ? (
                   <div className="space-y-4">
                     <div className="relative w-full h-96 bg-gray-900 rounded-lg overflow-hidden">
-                      <Cropper
-                        image={heroContent.hero_image_url}
-                        crop={crop}
-                        zoom={zoom}
-                        aspect={16 / 9}
-                        onCropChange={setCrop}
-                        onZoomChange={setZoom}
-                        onCropComplete={onCropComplete}
-                        objectFit="horizontal-cover"
+                      <div
+                        className="absolute inset-0"
+                        style={{
+                          backgroundImage: `url(${heroContent.hero_image_url})`,
+                          backgroundSize: `${zoom * 100}%`,
+                          backgroundPosition: `${positionX}% ${positionY}%`,
+                          backgroundRepeat: 'no-repeat'
+                        }}
                       />
                     </div>
                     <div className="space-y-3">
                       <div>
                         <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
                           <ZoomIn size={16} />
-                          Zoom: {Math.round(zoom * 100)}%
+                          Scale: {Math.round(zoom * 100)}%
                         </label>
                         <input
                           type="range"
@@ -349,8 +351,38 @@ export function HeroValuesEditor() {
                           className="w-full"
                         />
                       </div>
+                      <div>
+                        <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
+                          <Move size={16} />
+                          Horizontal Position: {positionX}%
+                        </label>
+                        <input
+                          type="range"
+                          min={0}
+                          max={100}
+                          step={1}
+                          value={positionX}
+                          onChange={(e) => setPositionX(Number(e.target.value))}
+                          className="w-full"
+                        />
+                      </div>
+                      <div>
+                        <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
+                          <Move size={16} className="rotate-90" />
+                          Vertical Position: {positionY}%
+                        </label>
+                        <input
+                          type="range"
+                          min={0}
+                          max={100}
+                          step={1}
+                          value={positionY}
+                          onChange={(e) => setPositionY(Number(e.target.value))}
+                          className="w-full"
+                        />
+                      </div>
                       <p className="text-xs text-gray-500">
-                        Drag the image to reposition it. Use the slider to zoom in/out. Changes will be saved when you click "Save Hero Content".
+                        Use the sliders to adjust image position and scale. Changes will be saved when you click "Save Hero Content".
                       </p>
                     </div>
                   </div>
