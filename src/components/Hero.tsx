@@ -19,9 +19,9 @@ export function Hero() {
   return (
     <section className="relative bg-gradient-to-br from-blue-50 to-white py-20 md:py-32 overflow-hidden">
       {heroContent?.hero_image_url && (
-        <div className="absolute inset-0 z-0">
+        <>
           <div
-            className="w-full h-full"
+            className="absolute inset-0 z-0"
             style={{
               backgroundImage: `url(${heroContent.hero_image_url})`,
               backgroundSize: `${imageScale * 100}%`,
@@ -30,10 +30,10 @@ export function Hero() {
             }}
           />
           <div
-            className="absolute inset-0 bg-gradient-to-br from-blue-50 to-white"
+            className="absolute inset-0 z-10 bg-gradient-to-br from-blue-50 to-white"
             style={{ opacity: overlayOpacity }}
           />
-        </div>
+        </>
       )}
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20">
@@ -41,7 +41,7 @@ export function Hero() {
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
             {heading}
           </h1>
-          <p className="text-xl md:text-2xl text-gray-600 mb-8 leading-relaxed relative z-30">
+          <p className="text-xl md:text-2xl text-gray-600 mb-8 leading-relaxed">
             {subheading}
           </p>
           <div className="flex flex-col sm:flex-row gap-4">
