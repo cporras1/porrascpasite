@@ -25,7 +25,7 @@ export function HeroValuesEditor() {
   const [zoom, setZoom] = useState(1);
   const [positionX, setPositionX] = useState(50);
   const [positionY, setPositionY] = useState(50);
-  const [opacity, setOpacity] = useState(0.3);
+  const [opacity, setOpacity] = useState(0.5);
   const [showImageAdjust, setShowImageAdjust] = useState(false);
 
   useEffect(() => {
@@ -45,7 +45,7 @@ export function HeroValuesEditor() {
         setZoom(Number(heroRes.data.hero_image_scale) || 1);
         setPositionX(Number(heroRes.data.hero_image_position_x) || 50);
         setPositionY(Number(heroRes.data.hero_image_position_y) || 50);
-        setOpacity(Number(heroRes.data.hero_image_opacity) || 0.3);
+        setOpacity(Number(heroRes.data.hero_image_opacity) ?? 0.5);
       }
       if (tilesRes.data) setValueTiles(tilesRes.data);
       if (settingsRes.data) setValuesTagline(settingsRes.data.values_tagline || '');
@@ -82,7 +82,7 @@ export function HeroValuesEditor() {
         hero_image_scale: 1,
         hero_image_position_x: 50,
         hero_image_position_y: 50,
-        hero_image_opacity: 0.3
+        hero_image_opacity: 0.5
       } : null);
       setZoom(1);
       setCrop({ x: 0, y: 0 });
@@ -156,7 +156,7 @@ export function HeroValuesEditor() {
             hero_image_scale: heroContent?.hero_image_scale || 1,
             hero_image_position_x: heroContent?.hero_image_position_x || 50,
             hero_image_position_y: heroContent?.hero_image_position_y || 50,
-            hero_image_opacity: heroContent?.hero_image_opacity || 0.3
+            hero_image_opacity: heroContent?.hero_image_opacity ?? 0.5
           })
           .select()
           .single();
@@ -330,16 +330,19 @@ export function HeroValuesEditor() {
 
                 {showImageAdjust ? (
                   <div className="space-y-4">
-                    <div className="relative w-full h-96 bg-gray-900 rounded-lg overflow-hidden">
+                    <div className="relative w-full h-96 bg-gradient-to-br from-blue-50 to-white rounded-lg overflow-hidden">
                       <div
                         className="absolute inset-0"
                         style={{
                           backgroundImage: `url(${heroContent.hero_image_url})`,
                           backgroundSize: `${zoom * 100}%`,
                           backgroundPosition: `${positionX}% ${positionY}%`,
-                          backgroundRepeat: 'no-repeat',
-                          opacity: opacity
+                          backgroundRepeat: 'no-repeat'
                         }}
+                      />
+                      <div
+                        className="absolute inset-0 bg-gradient-to-br from-blue-50 to-white"
+                        style={{ opacity: opacity }}
                       />
                     </div>
                     <div className="space-y-3">
@@ -391,7 +394,7 @@ export function HeroValuesEditor() {
                       <div>
                         <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
                           <ImageIcon size={16} />
-                          Image Opacity: {Math.round(opacity * 100)}%
+                          Overlay Opacity: {Math.round(opacity * 100)}%
                         </label>
                         <input
                           type="range"
@@ -404,7 +407,7 @@ export function HeroValuesEditor() {
                         />
                       </div>
                       <p className="text-xs text-gray-500">
-                        Use the sliders to adjust image position, scale, and opacity. Lower opacity makes text more readable. Changes will be saved when you click "Save Hero Content".
+                        Adjust image position and scale. Use overlay opacity to control image visibility - lower values show more of the image, higher values make text more readable. Changes will be saved when you click "Save Hero Content".
                       </p>
                     </div>
                   </div>

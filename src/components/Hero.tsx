@@ -14,7 +14,7 @@ export function Hero() {
   const imageScale = Number(heroContent?.hero_image_scale) || 1;
   const imagePosX = Number(heroContent?.hero_image_position_x) || 50;
   const imagePosY = Number(heroContent?.hero_image_position_y) || 50;
-  const imageOpacity = Number(heroContent?.hero_image_opacity) ?? 0.3;
+  const overlayOpacity = Number(heroContent?.hero_image_opacity) ?? 0.5;
 
   return (
     <section className="relative bg-gradient-to-br from-blue-50 to-white py-20 md:py-32 overflow-hidden">
@@ -26,11 +26,13 @@ export function Hero() {
               backgroundImage: `url(${heroContent.hero_image_url})`,
               backgroundSize: `${imageScale * 100}%`,
               backgroundPosition: `${imagePosX}% ${imagePosY}%`,
-              backgroundRepeat: 'no-repeat',
-              opacity: imageOpacity
+              backgroundRepeat: 'no-repeat'
             }}
           />
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-white opacity-80" />
+          <div
+            className="absolute inset-0 bg-gradient-to-br from-blue-50 to-white"
+            style={{ opacity: overlayOpacity }}
+          />
         </div>
       )}
 
