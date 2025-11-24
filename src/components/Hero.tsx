@@ -36,12 +36,12 @@ export function Hero() {
         </div>
       )}
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20">
         <div className="max-w-3xl">
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
             {heading}
           </h1>
-          <p className="text-xl md:text-2xl text-gray-600 mb-8 leading-relaxed">
+          <p className="text-xl md:text-2xl text-gray-600 mb-8 leading-relaxed relative z-30">
             {subheading}
           </p>
           <div className="flex flex-col sm:flex-row gap-4">
@@ -55,14 +55,8 @@ export function Hero() {
             </a>
             <a
               href="#services"
-              className="inline-flex items-center justify-center px-8 py-4 rounded-lg border-2 font-semibold text-lg transition-all"
-              style={{ borderColor: settings.secondary_color, color: settings.secondary_color, backgroundColor: 'transparent' }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = `${settings.secondary_color}10`;
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = 'transparent';
-              }}
+              className="inline-flex items-center justify-center px-8 py-4 rounded-lg font-semibold text-lg transition-all hover:opacity-90 shadow-lg text-white"
+              style={{ backgroundColor: settings.secondary_color }}
             >
               Our Services
             </a>
