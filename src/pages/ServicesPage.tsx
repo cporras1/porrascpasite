@@ -1,5 +1,5 @@
 import { Building2, FileText, Calculator, Briefcase, Users, TrendingUp } from 'lucide-react';
-import { Header } from '../components/Header';
+import { PageHeader } from '../components/PageHeader';
 import { Footer } from '../components/Footer';
 import { useServices } from '../hooks/useServices';
 import { useSiteSettings } from '../hooks/useSiteSettings';
@@ -40,7 +40,7 @@ export function ServicesPage() {
 
   return (
     <div className="min-h-screen bg-white">
-      <Header />
+      <PageHeader />
 
       <main>
         <div className="bg-gradient-to-br from-blue-50 to-gray-50 py-16">

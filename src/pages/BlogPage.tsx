@@ -1,5 +1,5 @@
 import { Calendar, User, Eye } from 'lucide-react';
-import { Header } from '../components/Header';
+import { PageHeader } from '../components/PageHeader';
 import { Footer } from '../components/Footer';
 import { useBlogPosts } from '../hooks/useBlog';
 import { useSiteSettings } from '../hooks/useSiteSettings';
@@ -29,7 +29,7 @@ export function BlogPage() {
 
   return (
     <div className="min-h-screen bg-white">
-      <Header />
+      <PageHeader />
 
       <main>
         <div className="bg-gradient-to-br from-blue-50 to-gray-50 py-16">

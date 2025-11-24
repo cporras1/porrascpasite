@@ -1,6 +1,6 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { Calendar, User, Eye, ArrowLeft } from 'lucide-react';
-import { Header } from '../components/Header';
+import { PageHeader } from '../components/PageHeader';
 import { Footer } from '../components/Footer';
 import { useBlogPost } from '../hooks/useBlog';
 import { useSiteSettings } from '../hooks/useSiteSettings';
@@ -25,7 +25,7 @@ export function BlogPostPage() {
   if (!post) {
     return (
       <div className="min-h-screen bg-white">
-        <Header />
+        <PageHeader />
         <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="text-center">
             <h1 className="text-3xl font-bold text-gray-900 mb-4">Blog Post Not Found</h1>
@@ -55,7 +55,7 @@ export function BlogPostPage() {
 
   return (
     <div className="min-h-screen bg-white">
-      <Header />
+      <PageHeader />
 
       <main>
         <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
