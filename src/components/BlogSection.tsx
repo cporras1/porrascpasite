@@ -6,7 +6,7 @@ import { useSiteSettings } from '../hooks/useSiteSettings';
 type ViewMode = 'featured' | 'popular' | 'newest';
 
 export function BlogSection() {
-  return <section id="blog"><BlogSectionContent /></section>;
+  return <section id="blog" className="pt-32 -mt-12"><BlogSectionContent /></section>;
 }
 
 function BlogSectionContent() {
