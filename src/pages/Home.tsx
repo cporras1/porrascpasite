@@ -28,7 +28,7 @@ export function Home() {
         }
       };
 
-      setTimeout(scrollToElement, 300);
+      setTimeout(scrollToElement, 800);
     } else {
       window.scrollTo(0, 0);
     }
