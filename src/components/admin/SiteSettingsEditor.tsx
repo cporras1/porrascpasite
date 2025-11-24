@@ -89,6 +89,12 @@ export function SiteSettingsEditor() {
           facebook_url: settings.facebook_url,
           linkedin_url: settings.linkedin_url,
           footer_text: settings.footer_text,
+          show_ccifp: settings.show_ccifp,
+          ccifp_title: settings.ccifp_title,
+          ccifp_description: settings.ccifp_description,
+          show_dopecfo: settings.show_dopecfo,
+          dopecfo_title: settings.dopecfo_title,
+          dopecfo_description: settings.dopecfo_description,
           updated_at: new Date().toISOString(),
         })
         .eq('id', settings.id);
@@ -374,6 +380,100 @@ export function SiteSettingsEditor() {
               onChange={(e) => setSettings({ ...settings, linkedin_url: e.target.value })}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">Certifications</h3>
+
+        <div className="space-y-6">
+          <div className="p-6 border border-gray-200 rounded-lg">
+            <div className="mb-4">
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={settings.show_ccifp}
+                  onChange={(e) => setSettings({ ...settings, show_ccifp: e.target.checked })}
+                  className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                />
+                <span className="text-sm font-medium text-gray-700">
+                  Display CCIFP Certification
+                </span>
+              </label>
+            </div>
+
+            {settings.show_ccifp && (
+              <div className="space-y-4 ml-6">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Title
+                  </label>
+                  <input
+                    type="text"
+                    value={settings.ccifp_title}
+                    onChange={(e) => setSettings({ ...settings, ccifp_title: e.target.value })}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Description
+                  </label>
+                  <textarea
+                    value={settings.ccifp_description}
+                    onChange={(e) => setSettings({ ...settings, ccifp_description: e.target.value })}
+                    rows={3}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  />
+                </div>
+              </div>
+            )}
+          </div>
+
+          <div className="p-6 border border-gray-200 rounded-lg">
+            <div className="mb-4">
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={settings.show_dopecfo}
+                  onChange={(e) => setSettings({ ...settings, show_dopecfo: e.target.checked })}
+                  className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                />
+                <span className="text-sm font-medium text-gray-700">
+                  Display DopeCFO VIP Pro Member
+                </span>
+              </label>
+            </div>
+
+            {settings.show_dopecfo && (
+              <div className="space-y-4 ml-6">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Title
+                  </label>
+                  <input
+                    type="text"
+                    value={settings.dopecfo_title}
+                    onChange={(e) => setSettings({ ...settings, dopecfo_title: e.target.value })}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Description
+                  </label>
+                  <textarea
+                    value={settings.dopecfo_description}
+                    onChange={(e) => setSettings({ ...settings, dopecfo_description: e.target.value })}
+                    rows={3}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  />
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>

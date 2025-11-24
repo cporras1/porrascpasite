@@ -22,6 +22,12 @@ export interface Database {
           linkedin_url: string | null;
           twitter_url: string | null;
           footer_text: string | null;
+          show_ccifp: boolean;
+          ccifp_title: string;
+          ccifp_description: string;
+          show_dopecfo: boolean;
+          dopecfo_title: string;
+          dopecfo_description: string;
           created_at: string;
           updated_at: string;
         };

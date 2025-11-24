@@ -64,20 +64,41 @@ export function About() {
           })}
         </div>
 
-        <div
-          className="mt-16 rounded-2xl p-8 md:p-12"
-          style={{ backgroundColor: `${settings.accent_color}10` }}
-        >
-          <div className="max-w-3xl mx-auto text-center">
-            <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
-              Certified Construction Industry Financial Professional
-            </h3>
-            <p className="text-lg text-gray-600 leading-relaxed">
-              Our team holds specialized certifications including CCIFP (Certified Construction Industry Financial Professional),
-              demonstrating our expertise in serving construction businesses and their unique accounting needs.
-            </p>
+        {(settings.show_ccifp || settings.show_dopecfo) && (
+          <div className="mt-16 space-y-8">
+            {settings.show_ccifp && (
+              <div
+                className="rounded-2xl p-8 md:p-12"
+                style={{ backgroundColor: `${settings.accent_color}10` }}
+              >
+                <div className="max-w-3xl mx-auto text-center">
+                  <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
+                    {settings.ccifp_title}
+                  </h3>
+                  <p className="text-lg text-gray-600 leading-relaxed">
+                    {settings.ccifp_description}
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {settings.show_dopecfo && (
+              <div
+                className="rounded-2xl p-8 md:p-12"
+                style={{ backgroundColor: `${settings.secondary_color}10` }}
+              >
+                <div className="max-w-3xl mx-auto text-center">
+                  <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
+                    {settings.dopecfo_title}
+                  </h3>
+                  <p className="text-lg text-gray-600 leading-relaxed">
+                    {settings.dopecfo_description}
+                  </p>
+                </div>
+              </div>
+            )}
           </div>
-        </div>
+        )}
       </div>
     </section>
   );
