@@ -6,6 +6,10 @@ html {
   scroll-padding-top: 140px;
 }
 
+section[id] {
+  scroll-margin-top: 140px;
+}
+
 .wysiwyg-editor .ql-container {
   min-height: 300px;
   font-size: 16px;
