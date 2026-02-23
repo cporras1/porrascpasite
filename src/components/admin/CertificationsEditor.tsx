@@ -177,44 +177,44 @@ export function CertificationsEditor() {
   const moveUp = async (cert: Certification, index: number) => {
     if (index === 0) return;
 
-    const prevCert = certifications[index - 1];
+    const newOrder = [...certifications];
+    [newOrder[index], newOrder[index - 1]] = [newOrder[index - 1], newOrder[index]];
 
     try {
-      await supabase
-        .from('certifications')
-        .update({ display_order: prevCert.display_order })
-        .eq('id', cert.id);
+      const updates = newOrder.map((item, idx) =>
+        supabase
+          .from('certifications')
+          .update({ display_order: idx })
+          .eq('id', item.id)
+      );
 
-      await supabase
-        .from('certifications')
-        .update({ display_order: cert.display_order })
-        .eq('id', prevCert.id);
-
-      loadCertifications();
+      await Promise.all(updates);
+      await loadCertifications();
     } catch (error) {
       console.error('Error reordering:', error);
+      setMessage({ type: 'error', text: 'Failed to reorder certifications' });
     }
   };
 
   const moveDown = async (cert: Certification, index: number) => {
     if (index === certifications.length - 1) return;
 
-    const nextCert = certifications[index + 1];
+    const newOrder = [...certifications];
+    [newOrder[index], newOrder[index + 1]] = [newOrder[index + 1], newOrder[index]];
 
     try {
-      await supabase
-        .from('certifications')
-        .update({ display_order: nextCert.display_order })
-        .eq('id', cert.id);
+      const updates = newOrder.map((item, idx) =>
+        supabase
+          .from('certifications')
+          .update({ display_order: idx })
+          .eq('id', item.id)
+      );
 
-      await supabase
-        .from('certifications')
-        .update({ display_order: cert.display_order })
-        .eq('id', nextCert.id);
-
-      loadCertifications();
+      await Promise.all(updates);
+      await loadCertifications();
     } catch (error) {
       console.error('Error reordering:', error);
+      setMessage({ type: 'error', text: 'Failed to reorder certifications' });
     }
   };
 
