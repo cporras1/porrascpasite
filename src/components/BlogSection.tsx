@@ -24,8 +24,8 @@ function BlogSectionContent() {
 
   if (loading) {
     return (
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-32">
+        <div className="max-w-7xl mx-auto px-8 sm:px-12 lg:px-16">
           <div className="text-center">
             <div className="animate-pulse">Loading blog posts...</div>
           </div>
@@ -47,23 +47,23 @@ function BlogSectionContent() {
   };
 
   return (
-    <section id="blog" className="py-20 bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+    <section id="blog" className="py-32">
+      <div className="max-w-7xl mx-auto px-8 sm:px-12 lg:px-16">
+        <div className="text-center mb-16">
+          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
             From Our Blog
           </h2>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto mb-8">
+          <p className="text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto mb-12 leading-relaxed">
             Insights, tips, and updates from our team of experts
           </p>
 
-          <div className="inline-flex rounded-lg border border-gray-300 p-1 bg-gray-50">
+          <div className="inline-flex glass-card rounded-[2rem] p-2">
             <button
               onClick={() => setViewMode('featured')}
-              className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${
+              className={`px-6 py-3 rounded-[1.5rem] text-base font-bold transition-all ${
                 viewMode === 'featured'
-                  ? 'text-white shadow-sm'
-                  : 'text-gray-700 hover:text-gray-900'
+                  ? 'text-white shadow-lg'
+                  : 'text-gray-700 hover:text-gray-900 hover:scale-105'
               }`}
               style={viewMode === 'featured' ? { backgroundColor: settings.primary_color } : {}}
             >
@@ -71,10 +71,10 @@ function BlogSectionContent() {
             </button>
             <button
               onClick={() => setViewMode('popular')}
-              className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${
+              className={`px-6 py-3 rounded-[1.5rem] text-base font-bold transition-all ${
                 viewMode === 'popular'
-                  ? 'text-white shadow-sm'
-                  : 'text-gray-700 hover:text-gray-900'
+                  ? 'text-white shadow-lg'
+                  : 'text-gray-700 hover:text-gray-900 hover:scale-105'
               }`}
               style={viewMode === 'popular' ? { backgroundColor: settings.primary_color } : {}}
             >
@@ -82,10 +82,10 @@ function BlogSectionContent() {
             </button>
             <button
               onClick={() => setViewMode('newest')}
-              className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${
+              className={`px-6 py-3 rounded-[1.5rem] text-base font-bold transition-all ${
                 viewMode === 'newest'
-                  ? 'text-white shadow-sm'
-                  : 'text-gray-700 hover:text-gray-900'
+                  ? 'text-white shadow-lg'
+                  : 'text-gray-700 hover:text-gray-900 hover:scale-105'
               }`}
               style={viewMode === 'newest' ? { backgroundColor: settings.primary_color } : {}}
             >
@@ -94,46 +94,46 @@ function BlogSectionContent() {
           </div>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-3 gap-10">
           {posts.map((post) => (
             <article
               key={post.id}
-              className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-100"
+              className="glass-card rounded-[2.5rem] overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-2xl"
             >
               {post.featured_image_url && (
                 <div className="aspect-video overflow-hidden">
                   <img
                     src={post.featured_image_url}
                     alt={post.title}
-                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                    className="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
                   />
                 </div>
               )}
-              <div className="p-6">
-                <div className="flex items-center gap-4 text-xs text-gray-500 mb-3">
-                  <span className="flex items-center gap-1">
-                    <Calendar size={12} />
+              <div className="p-8">
+                <div className="flex items-center gap-4 text-sm text-gray-600 mb-4">
+                  <span className="flex items-center gap-2 font-medium">
+                    <Calendar size={16} />
                     {post.published_at ? formatDate(post.published_at) : formatDate(post.created_at)}
                   </span>
-                  <span className="flex items-center gap-1">
-                    <Eye size={12} />
+                  <span className="flex items-center gap-2 font-medium">
+                    <Eye size={16} />
                     {post.view_count}
                   </span>
                 </div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2 line-clamp-2">
+                <h3 className="text-xl font-bold text-gray-900 mb-3 line-clamp-2">
                   {post.title}
                 </h3>
                 {post.excerpt && (
-                  <p className="text-gray-600 text-sm mb-4 line-clamp-2">{post.excerpt}</p>
+                  <p className="text-gray-700 text-base mb-5 line-clamp-2 leading-relaxed">{post.excerpt}</p>
                 )}
                 <div className="flex items-center justify-between">
-                  <span className="flex items-center gap-2 text-xs text-gray-500">
-                    <User size={12} />
+                  <span className="flex items-center gap-2 text-sm text-gray-600 font-medium">
+                    <User size={14} />
                     {post.author_name}
                   </span>
                   <a
                     href={`/blog/${post.slug}`}
-                    className="text-sm font-semibold transition-colors hover:underline"
+                    className="text-base font-bold transition-all hover:scale-110"
                     style={{ color: settings.primary_color }}
                   >
                     Read More →
@@ -144,14 +144,14 @@ function BlogSectionContent() {
           ))}
         </div>
 
-        <div className="text-center mt-12">
+        <div className="text-center mt-16">
           <a
             href="/blog"
-            className="inline-flex items-center gap-2 px-8 py-4 rounded-lg text-white font-semibold text-lg transition-all hover:opacity-90 shadow-lg"
+            className="inline-flex items-center gap-3 px-10 py-5 rounded-[2rem] text-white font-bold text-lg transition-all hover:scale-105 hover:shadow-2xl"
             style={{ backgroundColor: settings.secondary_color }}
           >
             View All Posts
-            <ArrowRight size={20} />
+            <ArrowRight size={22} />
           </a>
         </div>
       </div>
